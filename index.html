@@ -226,7 +226,7 @@
     function loadstl(url){
         scene.remove(mesh);
         // document.getElementById('stlfile').value
-        loader.load(url, function(geometry) {
+        loader.load('/proxy?'+url, function(geometry) {
             mesh = new THREE.Mesh( geometry, material );
             console.log(mesh);
 
