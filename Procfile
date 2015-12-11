@@ -1,1 +1,1 @@
-web: node wisepix.web
+web: ./bin/http-server
