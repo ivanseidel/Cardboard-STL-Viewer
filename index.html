@@ -52,8 +52,8 @@
 <body>
 <!-- https://github.com/jordan314/Cardboard-STL-Viewer -->
 <div class="formloader">
-    Load STL <input type="text" name="stlfile" id="stlfile" value="http://thingiverse-production-new.s3.amazonaws.com/assets/c4/4c/76/de/9b/jordanb.stl" /> <button id="load" onclick="loadstl();">Load</button>
-    <p class="zoom">Zoom <button class="zoombutton" onclick="zoomin();">+</button> <button class="zoombutton" onclick="zoomout();">-</button></p>
+    <!-- Load STL <input type="text" name="stlfile" id="stlfile" value="http://thingiverse-production-new.s3.amazonaws.com/assets/c4/4c/76/de/9b/jordanb.stl" /> <button id="load" onclick="loadstl();">Load</button>
+    <p class="zoom">Zoom <button class="zoombutton" onclick="zoomin();">+</button> <button class="zoombutton" onclick="zoomout();">-</button></p> -->
 
 </div>
 <script>
@@ -99,11 +99,11 @@
         loader = new THREE.STLLoader();
         material = new THREE.MeshPhongMaterial( { color: 0xff0000, specular: 0x111111, shininess: 30, shading: THREE.FlatShading });
 
-        loader.load('engagement-robot-pair2.stl', function(geometry) {
-            mesh = new THREE.Mesh( geometry, material );
-            mesh.rotation.set(1.57079633, 1.57079633 * 2, 0);
-            scene.add( mesh );
-        });
+        // loader.load('engagement-robot-pair2.stl', function(geometry) {
+        //     mesh = new THREE.Mesh( geometry, material );
+        //     mesh.rotation.set(1.57079633, 1.57079633 * 2, 0);
+        //     scene.add( mesh );
+        // });
 
         var grid = new THREE.GridHelper(500, 10);
         grid.position.y = -40;
@@ -155,6 +155,18 @@
 
 
         document.body.appendChild( renderer.domElement );
+
+
+        // Read URL from PATH
+        var stlUrl = window.location.search;
+        stlUrl = stlUrl.substring(1);
+
+        if(!stlUrl){
+            loadstl('engagement-robot-pair2.stl');
+        }else{
+            loadstl(stlUrl);
+        }
+
 
         /*
         document.getElementsByTagName('canvas')[0].addEventListener('gestureend', function(e) {
@@ -211,12 +223,20 @@
 
     }
 
-    function loadstl(){
+    function loadstl(url){
         scene.remove(mesh);
-        loader.load(document.getElementById('stlfile').value, function(geometry) {
+        // document.getElementById('stlfile').value
+        loader.load(url, function(geometry) {
             mesh = new THREE.Mesh( geometry, material );
+            console.log(mesh);
+
+
+            var box = new THREE.Box3().setFromObject( mesh );
+            console.log( box.min, box.max, box.size() );
+
+
             mesh.rotation.set(1.57079633, 1.57079633 * 2, 0);
-            camera.position.z = 40;
+            // camera.position.z = 40;
             scene.add( mesh );
         });
     }
